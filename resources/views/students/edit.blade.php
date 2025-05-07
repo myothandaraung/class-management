@@ -31,20 +31,14 @@
             </div>
 
             <div class="mb-3">
-                <label for="user_id" class="form-label">User</label>
-                <select class="form-select @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
-                    <option value="">Select User</option>
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}" {{ old('user_id', $student->user_id) == $user->id ? 'selected' : '' }}>
-                            {{ $user->email }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('user_id')
+                <label for="email" class="form-label">email</label>
+                <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $student->user->email) }}" disabled>
+                @error('email')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
+            
             <div class="mb-3">
                 <label for="phone" class="form-label">Phone</label>
                 <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', $student->phone) }}">
@@ -102,6 +96,22 @@
                 <label for="religion" class="form-label">Religion</label>
                 <input type="text" class="form-control @error('religion') is-invalid @enderror" id="religion" name="religion" value="{{ old('religion', $student->religion) }}">
                 @error('religion')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">New Password</label>
+                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password_confirmation" name="password_confirmation">
+                @error('password_confirmation')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>

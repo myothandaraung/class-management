@@ -81,7 +81,7 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
-        $student = Student::findOrFail($id);
+        $student = Student::with('user')->findOrFail($id);
         return view('students.edit', compact('student'));
     }
 
@@ -93,7 +93,6 @@ class StudentController extends Controller
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:students,email,' . $id,
             'phone' => 'nullable|string|max:20',
             'date_of_birth' => 'required|date',
             'address' => 'nullable|string',
@@ -102,9 +101,25 @@ class StudentController extends Controller
             'nationality' => 'nullable|string',
             'religion' => 'nullable|string',
         ]);
-
+        
         $student = Student::findOrFail($id);
-        $student->update($validated);
+        $student->update([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'phone' => $validated['phone'],
+            'date_of_birth' => $validated['date_of_birth'],
+            'address' => $validated['address'],
+            'gender' => $validated['gender'],
+            'blood_group' => $validated['blood_group'],
+            'nationality' => $validated['nationality'],
+            'religion' => $validated['religion'],
+        ]);
+        $user = User::findOrFail($student->user_id);
+        if($request['password']){
+            $user->update([
+                'password' => Hash::make($request['password']),
+            ]);
+        }
 
         return redirect()->route('students.index')
             ->with('success', 'Student updated successfully');
