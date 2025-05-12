@@ -15,9 +15,8 @@ class Student extends Model
         'date_of_birth',
         'address',
         'gender',
-        'blood_group',
         'nationality',
-        'religion',
+        'thumbnail',
         'user_id',
     ];
 

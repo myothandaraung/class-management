@@ -20,9 +20,8 @@ return new class extends Migration
             $table->date('date_of_birth');
             $table->string('address')->nullable();
             $table->string('gender');
-            $table->string('blood_group')->nullable();
             $table->string('nationality')->nullable();
-            $table->string('religion')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
     }

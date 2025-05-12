@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class StudentController extends Controller
 {
@@ -14,6 +16,7 @@ class StudentController extends Controller
      */
     public function index()
     {
+        Log::info('Students index page');
         $students = Student::with('user')->latest()->paginate(10);
         return view('students.index', compact('students'));
     }
@@ -31,6 +34,7 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info($request->all());
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -40,11 +44,15 @@ class StudentController extends Controller
             'date_of_birth' => 'required|date',
             'address' => 'nullable|string',
             'gender' => 'required|string',
-            'blood_group' => 'nullable|string',
             'nationality' => 'nullable|string',
-            'religion' => 'nullable|string',
+            'thumbnail' => 'nullable|image|mimes:jped,png,jpg,gif|max:2048'
         ]);
-
+        $filename = null;
+        if($request->hasFile('thumbnail')){
+            $filename = Storage::disk('public')->putFile('students', $request->file('thumbnail'));
+        }
+  
+        
         $user = User::create([
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
@@ -57,9 +65,8 @@ class StudentController extends Controller
             'date_of_birth' => $validated['date_of_birth'],
             'address' => $validated['address'],
             'gender' => $validated['gender'],
-            'blood_group' => $validated['blood_group'],
             'nationality' => $validated['nationality'],
-            'religion' => $validated['religion'],
+            'thumbnail' => $filename,
             'user_id' => $user->id
         ]);
 
@@ -72,7 +79,7 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        $student = Student::findOrFail($id);
+        $student = Student::with('user')->findOrFail($id);
         return view('students.show', compact('student'));
     }
 

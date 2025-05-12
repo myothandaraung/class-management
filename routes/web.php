@@ -9,7 +9,10 @@ use App\Http\Controllers\SubjectController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+//login
+Route::get('/login', function () {
+    return view('layouts.login');
+})->name('login');
 // Student Routes
 Route::resource('students', StudentController::class);
 

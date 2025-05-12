@@ -1,56 +1,93 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Student Details</h2>
-    <div>
-        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning me-2">
-            <i class="fas fa-edit"></i> Edit
-        </a>
-        <form action="{{ route('students.destroy', $student->id) }}" method="POST" class="d-inline">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">
-                <i class="fas fa-trash"></i> Delete
-            </button>
-        </form>
-    </div>
-</div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Student Profile</h4>
+                    <div class="btn-group">
+                        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning btn-sm me-2">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this student?')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-4 text-center">
+                            <div class="position-relative">
+                                <img src="{{ $student->thumbnail ? url('storage/' . $student->thumbnail) : asset('images/default-avatar.png') }}" 
+                                     alt="{{ $student->full_name }}" 
+                                     class="img-fluid rounded-circle shadow-sm" 
+                                     style="width: 200px; height: 200px; object-fit: cover;">
+                                <div class="position-absolute bottom-0 start-50 translate-middle-x p-2 bg-white rounded-circle shadow-sm">
+                                    <span class="badge bg-success">Active</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h3 class="mb-3">{{ $student->full_name }}</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <i class="fas fa-envelope text-primary me-2"></i> 
+                                        <span class="text-muted">Email:</span> {{ $student->user->email }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <i class="fas fa-phone text-primary me-2"></i> 
+                                        <span class="text-muted">Phone:</span> {{ $student->phone }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <i class="fas fa-calendar text-primary me-2"></i> 
+                                        <span class="text-muted">DOB:</span> {{ $student->date_of_birth }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <i class="fas fa-venus-mars text-primary me-2"></i> 
+                                        <span class="text-muted">Gender:</span> {{ $student->gender }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <h4>Basic Information</h4>
-                <div class="mb-3">
-                    <strong>Full Name:</strong> {{ $student->full_name }}
-                </div>
-                <div class="mb-3">
-                    <strong>Email:</strong> {{ $student->email }}
-                </div>
-                <div class="mb-3">
-                    <strong>Phone:</strong> {{ $student->phone }}
-                </div>
-                <div class="mb-3">
-                    <strong>Date of Birth:</strong> {{ $student->date_of_birth }}
-                </div>
-                <div class="mb-3">
-                    <strong>Gender:</strong> {{ $student->gender }}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h4>Additional Information</h4>
-                <div class="mb-3">
-                    <strong>Address:</strong> {{ $student->address }}
-                </div>
-                <div class="mb-3">
-                    <strong>Blood Group:</strong> {{ $student->blood_group }}
-                </div>
-                <div class="mb-3">
-                    <strong>Nationality:</strong> {{ $student->nationality }}
-                </div>
-                <div class="mb-3">
-                    <strong>Religion:</strong> {{ $student->religion }}
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0 rounded-lg">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">Contact Information</h5>
+                                    <div class="mb-3">
+                                        <i class="fas fa-map-marker-alt text-primary me-2"></i> 
+                                        <span class="text-muted">Address:</span> {{ $student->address }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light border-0 rounded-lg">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">Personal Information</h5>
+                                    <div class="mb-3">
+                                        <i class="fas fa-flag text-primary me-2"></i> 
+                                        <span class="text-muted">Nationality:</span> {{ $student->nationality }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

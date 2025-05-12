@@ -3,229 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Admin Login</title>
+    <title>クラス管理システム</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #c0392b;
+            --info-color: #3498db;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --card-border: #e0e0e0;
         }
-        
+
         body {
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: var(--background-color);
             min-height: 100vh;
         }
-        
-        .login-container {
-            display: flex;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 1000px;
-            overflow: hidden;
-        }
-        
-        .illustration-section {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f9f9f9;
-        }
-        
-        .illustration-section img {
-            max-width: 100%;
-            height: auto;
-        }
-        
-        .form-section {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .login-heading {
-            font-size: 28px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 15px 40px 15px 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        
-        .input-field:focus {
-            border-color: #4a90e2;
-        }
-        
-        .input-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
-        
-        .forgot-password {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        
-        .forgot-password a {
-            color: #4a90e2;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        
-        .login-button {
-            background-color: #4a90e2;
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 15px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100%;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
             margin-bottom: 20px;
+            font-weight: 700;
         }
-        
-        .login-button:hover {
-            background-color: #3a80d2;
+
+        .hero-section p {
+            font-size: 1.25rem;
+            opacity: 0.9;
         }
-        
-        .signup-text {
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-section {
+            padding: 4rem 0;
+            background-color: var(--light-color);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
             text-align: center;
-            font-size: 14px;
-            color: #666;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
-        .signup-text a {
-            color: #4a90e2;
-            text-decoration: none;
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+
+        .cta-section {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--success-color), var(--info-color));
+            color: white;
+            text-align: center;
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
             font-weight: 600;
+            transition: all 0.3s ease;
         }
-        
+
+        .cta-button:hover {
+            background: var(--light-color);
+            transform: translateY(-2px);
+        }
+
         .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
             text-align: center;
-            margin-top: 20px;
         }
-        
-        .footer img {
-            max-width: 120px;
-        }
-        
+
         @media (max-width: 768px) {
-            .login-container {
-                flex-direction: column;
+            .hero-section h1 {
+                font-size: 2.5rem;
             }
-            
-            .illustration-section {
-                display: none;
+
+            .feature-card {
+                padding: 1.5rem;
             }
-            
-            .form-section {
-                padding: 30px 20px;
+
+            .stat-number {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <?php
-    $username = '';
-    // $error = '';
-    // if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //     $username = $_POST['username'] ?? '';
-    //     $password = $_POST['password'] ?? '';
-    //     if (empty($username) || empty($password)) {
-    //         $error = "Username and password are required";
-    //     } else {
-    //         $error = "Invalid credentials. Please try again.";
-    //     }
-    // }
-    ?>
-
-    <div class="login-container">
-        <div class="illustration-section">
-            <img src="<?php echo htmlspecialchars('/path/to/admin-illustration.png'); ?>" alt="Admin Illustration">
-        </div>
-        
-        <div class="form-section">
-            <h1 class="login-heading">Login</h1>
-            
-            <?php if (!empty($error)): ?>
-                <div style="color: red; margin-bottom: 15px; text-align: center;">
-                    <?php echo htmlspecialchars($error); ?>
-                </div>
-            <?php endif; ?>
-            
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <div class="input-group">
-                    <input type="text" name="username" class="input-field" placeholder="school" value="<?php echo htmlspecialchars($username); ?>">
-                    <span class="input-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                        </svg>
-                    </span>
-                </div>
-                
-                <div class="input-group">
-                    <input type="password" name="password" class="input-field" placeholder="••••••••">
-                    <span class="input-icon" style="cursor: pointer;" onclick="togglePasswordVisibility()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                        </svg>
-                    </span>
-                </div>
-                
-                <div class="forgot-password">
-                    <a href="forgot-password.php">Forgot Password?</a>
-                </div>
-                
-                <button type="submit" class="login-button">Login</button>
-                
-                <div class="signup-text">
-                    Don't have account? Let's <a href="register.php">Get Started For Free</a>
-                </div>
-            </form>
+    <div class="hero-section">
+        <div class="container">
+            <h1>クラス管理システム</h1>
+            <p>効率的なクラス管理と教育管理のための統合プラットフォーム</p>
+            <a href="{{ route('login') }}" class="btn btn-lg btn-light mt-4">ログイン</a>
         </div>
     </div>
-    
-    <div class="footer">
-        <img src="<?php echo htmlspecialchars('/path/to/vedmarg-logo.png'); ?>" alt="Vedmarg Logo">
-    </div>
 
-    <script>
-        function togglePasswordVisibility() {
-            const passwordField = document.querySelector('input[name="password"]');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-            } else {
-                passwordField.type = 'password';
-            }
-        }
-    </script>
+    <section class="features-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">主要機能</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-users feature-icon"></i>
+                        <h3>生徒管理</h3>
+                        <p>生徒の詳細情報、成績、出席状況を一元管理</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-chalkboard-teacher feature-icon"></i>
+                        <h3>教師管理</h3>
+                        <p>教師のスケジュール、評価、資格情報を管理</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-book feature-icon"></i>
+                        <h3>コース管理</h3>
+                        <p>コースの設定、スケジュール、進捗管理</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="text-center mb-5">システム統計</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">1,250+</div>
+                        <div class="stat-label">登録生徒数</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">教師数</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">20+</div>
+                        <div class="stat-label">開講コース数</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">満足度</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="mb-4">今すぐ始める</h2>
+            <p class="mb-4">効率的な学習管理を始めるために、今すぐログインしてください</p>
+            <a href="{{ route('login') }}" class="cta-button">ログイン</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 クラス管理システム. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
