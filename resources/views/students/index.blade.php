@@ -48,14 +48,7 @@
                                             </a>
                                             <a href="{{ route('students.edit', $student->id) }}" class="btn btn-sm btn-warning" title="編集">
                                                 <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form action="{{ route('students.destroy', $student->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('本当に削除しますか？')" title="削除">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
+                                            </a> 
                                         </div>
                                     </td>
                                 </tr>
@@ -79,7 +72,6 @@
         </div>
     </div>
 </div>
-
 @push('styles')
 <style>
     .table {
@@ -122,6 +114,7 @@
 
 @push('scripts')
 <script>
+
     // Add smooth scrolling to pagination links
     document.querySelectorAll('.page-link').forEach(link => {
         link.addEventListener('click', function(e) {

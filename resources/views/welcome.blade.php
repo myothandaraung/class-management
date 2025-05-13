@@ -139,7 +139,7 @@
         <div class="container">
             <h1>クラス管理システム</h1>
             <p>効率的なクラス管理と教育管理のための統合プラットフォーム</p>
-            <a href="{{ route('login') }}" class="btn btn-lg btn-light mt-4">ログイン</a>
+            {{-- <a href="{{ route('login') }}" class="btn btn-lg btn-light mt-4">ログイン</a> --}}
         </div>
     </div>
 

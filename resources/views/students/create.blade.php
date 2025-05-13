@@ -1,5 +1,19 @@
 @extends('layouts.app')
 
+<script>
+    // Function to preview image
+    function previewImage(input) {
+        console.log(input);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImage').src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
 @section('content')
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -91,12 +105,15 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" id="thumbnail" name="thumbnail" accept="image/*">
+                                <div class="form-floating mb-3">
+                                    <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" id="thumbnail" name="thumbnail" accept="image/*" onchange="window.previewImage(this)">
                                     <label for="thumbnail">プロフィール写真</label>
                                     @error('thumbnail')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                </div>
+                                <div class="preview-image text-center">
+                                    <img id="previewImage" src="" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
@@ -175,6 +192,7 @@
 
 @push('scripts')
 <script>
+
     // Form validation
     (function () {
         'use strict'

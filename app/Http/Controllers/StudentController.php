@@ -97,19 +97,34 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        Log::info($request->all());
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'phone' => 'nullable|string|max:20',
             'date_of_birth' => 'required|date',
             'address' => 'nullable|string',
             'gender' => 'required|string',
-            'blood_group' => 'nullable|string',
             'nationality' => 'nullable|string',
-            'religion' => 'nullable|string',
+            'thumbnail' => 'image|mimes:jped,png,jpg,gif|max:2048',
         ]);
         
         $student = Student::findOrFail($id);
+        $user = User::findOrFail($student->user_id);
+        $user->update([
+            'email' => $validated['email'],
+        ]);
+        $filename = null;
+        if($request->hasFile('thumbnail')){
+            if($student->thumbnail){
+                Storage::disk('public')->delete($student->thumbnail);
+            }
+            $filename = Storage::disk('public')->putFile('students', $request->file('thumbnail'));
+            $student->update([
+                'thumbnail' => $filename
+            ]);
+        }
         $student->update([
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
@@ -117,11 +132,9 @@ class StudentController extends Controller
             'date_of_birth' => $validated['date_of_birth'],
             'address' => $validated['address'],
             'gender' => $validated['gender'],
-            'blood_group' => $validated['blood_group'],
             'nationality' => $validated['nationality'],
-            'religion' => $validated['religion'],
         ]);
-        $user = User::findOrFail($student->user_id);
+
         if($request['password']){
             $user->update([
                 'password' => Hash::make($request['password']),
@@ -138,7 +151,10 @@ class StudentController extends Controller
     public function destroy(string $id)
     {
         $student = Student::findOrFail($id);
-        $student->delete();
+        $user = User::findOrFail($student->user_id);
+        $user->update([
+            'is_deleted' => true,
+        ]);
 
         return redirect()->route('students.index')
             ->with('success', 'Student deleted successfully');

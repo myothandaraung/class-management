@@ -122,5 +122,8 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+    'log' => 'daily',
+    'log_level' => 'debug',
+    'log_max_files' => 30,
 
 ];
