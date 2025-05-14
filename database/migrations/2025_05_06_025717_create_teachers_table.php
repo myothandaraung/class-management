@@ -21,11 +21,8 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('gender');
             $table->string('qualification');
-            $table->string('specialization');
-            $table->string('employee_id')->unique();
-            $table->string('designation');
-            $table->string('department');
-            $table->string('role');
+            $table->foreignId('department_id')->constrained('departments')->onDelete('cascade');
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
     }

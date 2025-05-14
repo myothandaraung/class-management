@@ -5,6 +5,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\DepartmentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,8 +14,7 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return view('layouts.login');
 })->name('login');
-// Student Routes
-Route::resource('students', StudentController::class);
+
 
 // Teacher Routes
 Route::resource('teachers', TeacherController::class);
@@ -24,3 +24,39 @@ Route::resource('courses', CourseController::class);
 
 // Subject Routes
 Route::resource('subjects', SubjectController::class);
+
+Route::prefix('departments')->name('departments.')->group(function () {
+    // Route::resource('students', StudentController::class);
+    Route::get('', [DepartmentController::class, 'index'])->name('index');
+    Route::get('/create', [DepartmentController::class, 'create'])->name('create');
+    Route::post('/add', [DepartmentController::class, 'store'])->name('store');
+    Route::get('/show/{department}', [DepartmentController::class, 'show'])->name('show');
+    Route::get('/edit/{department}', [DepartmentController::class, 'edit'])->name('edit');
+    Route::put('/update/{department}', [DepartmentController::class, 'update'])->name('update');
+    Route::delete('/delete/{department}', [DepartmentController::class, 'destroy'])->name('destroy');
+});
+
+Route::prefix('subjects')->name('subjects.')->group(function () {
+    Route::get('', [SubjectController::class, 'index'])->name('index');
+    Route::get('/create', [SubjectController::class, 'create'])->name('create');
+    Route::post('/add', [SubjectController::class, 'store'])->name('store');
+    Route::get('/show/{subject}', [SubjectController::class, 'show'])->name('show');
+    Route::get('/edit/{subject}', [SubjectController::class, 'edit'])->name('edit');
+    Route::put('/update/{subject}', [SubjectController::class, 'update'])->name('update');
+    Route::delete('/delete/{subject}', [SubjectController::class, 'destroy'])->name('destroy');
+});
+
+Route::prefix('courses')->name('courses.')->group(function () {
+    Route::get('', [CourseController::class, 'index'])->name('index');
+    Route::get('/create', [CourseController::class, 'create'])->name('create');
+    Route::post('/add', [CourseController::class, 'store'])->name('store');
+    Route::get('/show/{course}', [CourseController::class, 'show'])->name('show');
+    Route::get('/edit/{course}', [CourseController::class, 'edit'])->name('edit');
+    Route::put('/update/{course}', [CourseController::class, 'update'])->name('update');
+    Route::delete('/delete/{course}', [CourseController::class, 'destroy'])->name('destroy');
+});
+
+
+// Student Routes
+require __DIR__.'/student.php';
+require __DIR__.'/teacher.php';

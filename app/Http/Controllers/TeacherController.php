@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Teacher;
 
 class TeacherController extends Controller
 {
@@ -11,7 +12,9 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers = \App\Models\Teacher::all();
+        $teachers = Teacher::with('user')->whereHas('user', function($query){
+            $query->where('is_deleted', null);
+        })->latest()->paginate(10);;
         return view('teachers.index', compact('teachers'));
     }
 

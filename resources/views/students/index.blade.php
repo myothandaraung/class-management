@@ -48,7 +48,14 @@
                                             </a>
                                             <a href="{{ route('students.edit', $student->id) }}" class="btn btn-sm btn-warning" title="編集">
                                                 <i class="fas fa-edit"></i>
-                                            </a> 
+                                            </a>
+                                            <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteStudent(event, {{ $student->id }})" title="削除">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -73,56 +80,40 @@
     </div>
 </div>
 @push('styles')
-<style>
-    .table {
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-    
-    .table th {
-        background-color: #f8f9fa;
-        border-bottom: 2px solid #dee2e6;
-    }
-    
-    .table td {
-        vertical-align: middle;
-    }
-    
-    .table-hover tbody tr:hover {
-        background-color: rgba(0, 123, 255, 0.075);
-    }
-    
-    .btn-group {
-        gap: 0.5rem;
-    }
-    
-    .btn-sm {
-        padding: 0.25rem 0.5rem;
-    }
-    
-    .pagination .page-link {
-        color: #0d6efd;
-        border-color: #dee2e6;
-    }
-    
-    .pagination .page-item.active .page-link {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-    }
-</style>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/common.css') }}">
 @endpush
 
-@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 
     // Add smooth scrolling to pagination links
-    document.querySelectorAll('.page-link').forEach(link => {
-        link.addEventListener('click', function(e) {
+    $(document).ready(function() {
+        $('.page-link').click(function(e) {
             e.preventDefault();
-            const url = this.getAttribute('href');
+            const url = $(this).attr('href');
             window.location.href = url;
         });
     });
+
+    function deleteStudent(event, studentId) {
+        event.preventDefault();
+        Swal.fire({
+            title: '削除確認',
+            text: '本当にこの生徒を削除しますか？',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: '削除する',
+            cancelButtonText: 'キャンセル',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.closest('form').submit();
+            }
+        });
+    }
 </script>
-@endpush
+
 @endsection

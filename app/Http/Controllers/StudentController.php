@@ -17,7 +17,9 @@ class StudentController extends Controller
     public function index()
     {
         Log::info('Students index page');
-        $students = Student::with('user')->latest()->paginate(10);
+        $students = Student::with('user')->whereHas('user', function($query){
+            $query->where('is_deleted', null);
+        })->latest()->paginate(10);
         return view('students.index', compact('students'));
     }
 
@@ -45,7 +47,7 @@ class StudentController extends Controller
             'address' => 'nullable|string',
             'gender' => 'required|string',
             'nationality' => 'nullable|string',
-            'thumbnail' => 'nullable|image|mimes:jped,png,jpg,gif|max:2048'
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
         $filename = null;
         if($request->hasFile('thumbnail')){
@@ -71,7 +73,7 @@ class StudentController extends Controller
         ]);
 
         return redirect()->route('students.index')
-            ->with('success', 'Student created successfully');
+            ->with('success', '生徒の作成は成功した。');
     }
 
     /**
@@ -150,6 +152,8 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
+        Log::info('Student deleted');
+        Log::info($id);
         $student = Student::findOrFail($id);
         $user = User::findOrFail($student->user_id);
         $user->update([
@@ -157,7 +161,7 @@ class StudentController extends Controller
         ]);
 
         return redirect()->route('students.index')
-            ->with('success', 'Student deleted successfully');
+            ->with('success', '生徒を削除しました');
     }
 
 

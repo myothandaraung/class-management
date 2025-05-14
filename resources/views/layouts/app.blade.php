@@ -6,6 +6,7 @@
     <title>クラス管理システム</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}">
     <style>
         :root {
             --primary-color: #2c3e50;      /* Deep Navy - Professional and academic */
@@ -321,6 +322,12 @@
                         <a class="nav-link d-flex align-items-center" href="{{ route('subjects.index') }}">
                             <i class="fas fa-scroll me-2"></i>
                             <span>科目一覧</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" href="{{ route('departments.index') }}">
+                            <i class="fas fa-building me-2"></i>
+                            <span>部署一覧</span>
                         </a>
                     </li>
                 </ul>
