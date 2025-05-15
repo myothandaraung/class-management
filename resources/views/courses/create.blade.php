@@ -4,7 +4,7 @@
 <div class="container-fluid py-4">
     <div class="row mb-4">
         <div class="col-md-6">
-            <h2 class="text-primary fw-bold">新しいコースの追加</h2>
+            <h2 class="text-primary fw-bold">コース作成</h2>
         </div>
         <div class="col-md-6 text-end">
             <a href="{{ route('courses.index') }}" class="btn btn-outline-primary">
@@ -33,6 +33,28 @@
 
                         <div class="col-md-6">
                             <div class="form-floating">
+                                <select class="form-select border-0 shadow-sm @error('department_id') is-invalid @enderror" 
+                                        id="department_id" 
+                                        name="department_id" 
+                                        required>
+                                    <option value="">選択してください</option>
+                                    @foreach($departments as $department)
+                                        <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <label for="department_id" class="form-label fw-bold">
+                                    <i class="fas fa-building me-2"></i> 学科名 *
+                                </label>
+                            </div>
+                            @error('department_id')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
                                 <input type="text" 
                                        class="form-control border-0 shadow-sm @error('name') is-invalid @enderror" 
                                        id="name" 
@@ -48,21 +70,39 @@
                             @enderror
                         </div>
 
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <textarea class="form-control border-0 shadow-sm @error('description') is-invalid @enderror" 
+                                          id="description" 
+                                          name="description" 
+                                          rows="3"
+                                          placeholder="コースの詳細な説明を入力してください...">
+                                    {{ old('description') }}
+                                </textarea>
+                                <label for="description" class="form-label fw-bold">
+                                    <i class="fas fa-info-circle me-2"></i> 課程説明
+                                </label>
+                            </div>
+                            @error('description')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="col-md-6">
                             <div class="form-floating">
                                 <select class="form-select border-0 shadow-sm @error('year') is-invalid @enderror" 
                                         id="year" 
                                         name="year" 
                                         required>
-                                    <option value="">選択してください</option>
-                                    @for($year = date('Y'); $year >= date('Y') - 5; $year--)
-                                        <option value="{{ $year }}" {{ old('year') == $year ? 'selected' : '' }}>
-                                            {{ $year }}年度
-                                        </option>
-                                    @endfor
+                                    @php
+                                        $currentYear = date('Y');
+                                        for ($i = $currentYear - 5; $i <= $currentYear; $i++) {
+                                            echo '<option value="' . $i . '" ' . (old('year') == $i ? 'selected' : '') . '>' . $i . '年度</option>';
+                                        }
+                                    @endphp
                                 </select>
                                 <label for="year" class="form-label fw-bold">
-                                    <i class="fas fa-calendar me-2"></i> 年 *
+                                    <i class="fas fa-calendar me-2"></i> 年度 *
                                 </label>
                             </div>
                             @error('year')
@@ -85,51 +125,6 @@
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <div class="col-12">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-graduation-cap me-2"></i> 関連科目 *
-                            </label>
-                            <div class="input-group">
-                                <select class="form-select border-0 shadow-sm @error('subjects') is-invalid @enderror" 
-                                        id="subjects" 
-                                        name="subjects[]" 
-                                        multiple 
-                                        required>
-                                    @foreach($subjects as $subject)
-                                        <option value="{{ $subject->id }}" {{ in_array($subject->id, old('subjects', [])) ? 'selected' : '' }}>
-                                            {{ $subject->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('subjects')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label fw-bold">
-                                <i class="fas fa-chalkboard-teacher me-2"></i> 関連教師 *
-                            </label>
-                            <div class="input-group">
-                                <select class="form-select border-0 shadow-sm @error('teachers') is-invalid @enderror" 
-                                        id="teachers" 
-                                        name="teachers[]" 
-                                        multiple 
-                                        required>
-                                    @foreach($teachers as $teacher)
-                                        <option value="{{ $teacher->id }}" {{ in_array($teacher->id, old('teachers', [])) ? 'selected' : '' }}>
-                                            {{ $teacher->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('teachers')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
                         <div class="col-12 text-end">
                             <button type="submit" class="btn btn-primary px-4 py-2">
                                 <i class="fas fa-save me-2"></i> コースを追加

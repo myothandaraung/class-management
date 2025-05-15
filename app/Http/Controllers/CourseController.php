@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\Department;
 use Illuminate\Support\Facades\Log;
 
 class CourseController extends Controller
@@ -15,8 +16,20 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with(['subjects', 'teachers'])->get();
+        $courses = Course::with(['department'])->get();
         return view('courses.index', compact('courses'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Course  $course
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Course $course)
+    {
+        $course->load(['department']);
+        return view('courses.show', compact('course'));
     }
 
     /**
@@ -24,9 +37,9 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $subjects = Subject::all();
-        $teachers = Teacher::all();
-        return view('courses.create', compact('subjects', 'teachers'));
+        $departments = Department::where('is_deleted', null)->get();
+        Log::info($departments);
+        return view('courses.create', compact('departments'));
     }
 
     /**
@@ -36,32 +49,22 @@ class CourseController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'department_id' => 'required|exists:departments,id',
+            'price' => 'nullable|numeric',
+            'description' => 'nullable|string',
             'year' => 'required|integer|min:' . (date('Y') - 5) . '|max:' . date('Y'),
-            'subjects' => 'required|array|min:1',
-            'subjects.*' => 'exists:subjects,id',
-            'teachers' => 'required|array|min:1',
-            'teachers.*' => 'exists:teachers,id',
         ]);
-
+        Log::info($validated);
         $course = Course::create([
             'name' => $validated['name'],
+            'department_id' => $validated['department_id'],
+            'price' => $validated['price'],
+            'description' => $validated['description'],
             'year' => $validated['year'],
         ]);
 
-        $course->subjects()->attach($validated['subjects']);
-        $course->teachers()->attach($validated['teachers']);
-
         return redirect()->route('courses.index')
             ->with('success', 'コースを追加しました');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Course $course)
-    {
-        $course->load('subjects', 'teachers');
-        return view('courses.show', compact('course'));
     }
 
     /**
@@ -69,9 +72,8 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        $subjects = Subject::all();
-        $teachers = Teacher::all();
-        return view('courses.edit', compact('course', 'subjects', 'teachers'));
+        $departments = Department::all();
+        return view('courses.edit', compact('course', 'departments'));
     }
 
     /**
@@ -81,34 +83,33 @@ class CourseController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'department_id' => 'required|exists:departments,id',
             'year' => 'required|integer|min:' . (date('Y') - 5) . '|max:' . date('Y'),
-            'subjects' => 'required|array|min:1',
-            'subjects.*' => 'exists:subjects,id',
-            'teachers' => 'required|array|min:1',
-            'teachers.*' => 'exists:teachers,id',
+            'price' => 'nullable|numeric',
+            'description' => 'nullable|string',
         ]);
 
-        $course->update([
-            'name' => $validated['name'],
-            'year' => $validated['year'],
-        ]);
+        $course->update($validated);
 
-        $course->subjects()->sync($validated['subjects']);
-        $course->teachers()->sync($validated['teachers']);
-
-        return redirect()->route('courses.index')
+        return redirect()->route('courses.show', $course)
             ->with('success', 'コースを更新しました');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Course $course)
     {
-        $course->subjects()->detach();
-        $course->teachers()->detach();
-        $course->delete();
-
+        
+        Log::info($course);
+        $course->update([
+            'is_deleted' => true,
+        ]);
+        Subject::where('course_id', $course->id)->update([
+            'is_deleted' => true,
+        ]);
         return redirect()->route('courses.index')
             ->with('success', 'コースを削除しました');
     }

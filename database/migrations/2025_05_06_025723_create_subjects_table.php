@@ -18,6 +18,15 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('type')->nullable();
             $table->boolean('is_deleted')->nullable();
+            $table->foreignId('course_id')->constrained()->cascadeOnDelete();
+            $table->timestamps();
+        });
+        
+        Schema::create('class_subject_teacher', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('class_id')->constrained()->onDelete('cascade');
+            $table->foreignId('subject_id')->constrained()->onDelete('cascade');
+            $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

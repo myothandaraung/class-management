@@ -20,21 +20,6 @@ return new class extends Migration
             $table->foreignId('department_id')->constrained('departments')->onDelete('cascade');
             $table->timestamps();
         });
-
-        Schema::create('course_subject', function (Blueprint $table) {
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->foreignId('subject_id')->constrained()->onDelete('cascade');
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
-            $table->unique(['course_id', 'subject_id']);
-        });
-
-        Schema::create('course_student', function (Blueprint $table) {
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
-            $table->unique(['course_id', 'student_id']);
-        });
     }
 
     /**

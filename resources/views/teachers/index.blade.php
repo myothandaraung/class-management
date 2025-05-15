@@ -37,7 +37,7 @@
                                              style="width: 50px; height: 50px; object-fit: cover;">
                                     </td>
                                     <td class="text-center">{{ $teacher->full_name }}</td>
-                                    <td class="text-center">{{ $teacher->email }}</td>
+                                    <td class="text-center">{{ $teacher->user->email }}</td>
                                     <td class="text-center">{{ $teacher->phone }}</td>
                                     <td class="text-center">{{ $teacher->gender }}</td>
                                     <td class="text-center">{{ $teacher->department->name ?? '未設定' }}</td>

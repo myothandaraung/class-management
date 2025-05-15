@@ -13,20 +13,23 @@ class Course extends Model
         'name',
         'description',
         'year',
+        'department_id',
+        'price',
+        'is_deleted',
     ];
 
-    public function students()
+    public function department()
     {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsTo(Department::class);
     }
+
+    // public function students()
+    // {
+    //     return $this->belongsToMany(Student::class);
+    // }
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class, 'course_subject');
-    }
-
-    public function teachers()
-    {
-        return $this->belongsToMany(Teacher::class, 'course_subject');
+        return $this->belongsToMany(Subject::class);
     }
 }

@@ -16,23 +16,11 @@ class Teacher extends Model
         'address',
         'gender',
         'qualification',
-        'specialization',
-        'user_id',
-        'designation',
-        'department',
-        'role',
+        'position',
+        'department_id',
+        'thumbnail',
         'user_id'
     ];
-
-    public function courses()
-    {
-        return $this->belongsToMany(Course::class, 'course_subject');
-    }
-
-    public function subjects()
-    {
-        return $this->belongsToMany(Subject::class, 'course_subject');
-    }
 
     public function getFullNameAttribute()
     {

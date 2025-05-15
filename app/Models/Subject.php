@@ -13,15 +13,11 @@ class Subject extends Model
         'description',
         'code',
         'type',
+        'is_deleted',
     ];
-
-    public function courses()
-    {
-        return $this->belongsToMany(Course::class, 'course_subject');
-    }
 
     public function teachers()
     {
-        return $this->belongsToMany(Teacher::class, 'course_subject');
+        return $this->belongsToMany(Teacher::class, 'class_subject_teacher');
     }
 }
