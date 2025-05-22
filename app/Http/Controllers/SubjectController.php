@@ -26,6 +26,11 @@ class SubjectController extends Controller
     {
         $courses = Course::all();
         $teachers = Teacher::all();
+        $teachers->each(function($teacher){
+            $teacher->name = $teacher->getFullNameAttribute();
+        });
+        Log::info($courses);
+        Log::info($teachers);
         return view('subjects.create', compact('courses', 'teachers'));
     }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ClassController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +22,11 @@ Route::resource('teachers', TeacherController::class);
 
 // Course Routes
 Route::resource('courses', CourseController::class);
+
+// Class Routes
+Route::resource('classes', ClassController::class);
+
+// Subject Routes
 
 // Subject Routes
 Route::resource('subjects', SubjectController::class);
@@ -54,6 +60,16 @@ Route::prefix('courses')->name('courses.')->group(function () {
     Route::get('/edit/{course}', [CourseController::class, 'edit'])->name('edit');
     Route::put('/update/{course}', [CourseController::class, 'update'])->name('update');
     Route::delete('/delete/{course}', [CourseController::class, 'destroy'])->name('destroy');
+});
+
+Route::prefix('classes')->name('classes.')->group(function () {
+    Route::get('', [ClassController::class, 'index'])->name('index');
+    Route::get('/create', [ClassController::class, 'create'])->name('create');
+    Route::post('/add', [ClassController::class, 'store'])->name('store');
+    Route::get('/show/{class}', [ClassController::class, 'show'])->name('show');
+    Route::get('/edit/{class}', [ClassController::class, 'edit'])->name('edit');
+    Route::put('/update/{class}', [ClassController::class, 'update'])->name('update');
+    Route::delete('/delete/{class}', [ClassController::class, 'destroy'])->name('destroy');
 });
 
 

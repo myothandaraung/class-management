@@ -288,89 +288,435 @@
         }
     </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <i class="fas fa-graduation-cap me-2"></i>
-                <span>クラス管理システム</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" href="{{ route('students.index') }}">
-                            <i class="fas fa-user-graduate me-2"></i>
-                            <span>生徒一覧</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" href="{{ route('teachers.index') }}">
-                            <i class="fas fa-chalkboard-teacher me-2"></i>
-                            <span>教師一覧</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" href="{{ route('courses.index') }}">
-                            <i class="fas fa-book me-2"></i>
-                            <span>コース一覧</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" href="{{ route('subjects.index') }}">
-                            <i class="fas fa-scroll me-2"></i>
-                            <span>科目一覧</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" href="{{ route('departments.index') }}">
-                            <i class="fas fa-building me-2"></i>
-                            <span>部署一覧</span>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    @guest
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" href="{{ route('login') }}">
-                                <i class="fas fa-sign-in-alt me-2"></i>
-                                <span>ログイン</span>
-                            </a>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fas fa-sign-out-alt me-2"></i>
-                                <span>ログアウト</span>
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </li>
-                    @endguest
-                </ul>
+<body style="display: flex;">
+    <div class="d-flex flex-column flex-shrink-0 bg-white border-end" style="width: 280px; height: 100vh; overflow-y: auto; position: fixed;">
+        <div class="sidebar-header">
+            <div class="d-flex align-items-center p-4">
+                <i class="fas fa-graduation-cap text-primary me-3"></i>
+                <span class="sidebar-title">クラス管理システム</span>
+            </div>
+            <div class="sidebar-search px-4 mb-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" placeholder="検索...">
+                </div>
             </div>
         </div>
-    </nav>
 
-    <div class="container mt-4">
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
+        <div class="sidebar-content">
+            <div class="nav flex-column nav-pills mb-auto">
+                <a href="{{ route('classes.index') }}" class="nav-link">
+                    <i class="fas fa-book-reader text-primary me-3"></i>
+                    <span>クラス一覧</span>
+                </a>
+                <a href="{{ route('students.index') }}" class="nav-link">
+                    <i class="fas fa-user-graduate text-primary me-3"></i>
+                    <span>生徒一覧</span>
+                </a>
+                <a href="{{ route('teachers.index') }}" class="nav-link">
+                    <i class="fas fa-chalkboard-teacher text-primary me-3"></i>
+                    <span>教師一覧</span>
+                </a>
+                <a href="{{ route('courses.index') }}" class="nav-link">
+                    <i class="fas fa-book text-primary me-3"></i>
+                    <span>コース一覧</span>
+                </a>
+                <a href="{{ route('subjects.index') }}" class="nav-link">
+                    <i class="fas fa-scroll text-primary me-3"></i>
+                    <span>科目一覧</span>
+                </a>
+                <a href="{{ route('departments.index') }}" class="nav-link">
+                    <i class="fas fa-building text-primary me-3"></i>
+                    <span>部署一覧</span>
+                </a>
             </div>
-        @endif
+        </div>
 
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center px-4 py-3">
+                @guest
+                    <a href="{{ route('login') }}" class="btn btn-outline-primary d-flex align-items-center w-100">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        ログイン
+                    </a>
+                @else
+                    <a href="{{ route('logout') }}" class="btn btn-outline-danger d-flex align-items-center w-100" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        ログアウト
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                @endguest
             </div>
-        @endif
-
-        @yield('content')
+        </div>
     </div>
 
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="main-content">
+                        <!-- Page Title -->
+                        @if(View::hasSection('title'))
+                            <h1 class="mb-4 page-title">
+                                @yield('title')
+                            </h1>
+                        @endif
+
+                        <!-- Success Messages -->
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <!-- Error Messages -->
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <!-- Form Validation Errors -->
+                        @if($errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <!-- Main Content -->
+                        <div class="content-wrapper" style="min-height: calc(100vh - 150px);">
+                            @yield('content')
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* Layout Styles */
+        .d-flex.flex-column.flex-shrink-0 {
+            min-height: 100vh;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            background-color: var(--background-color);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .sidebar-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .sidebar-search .input-group {
+            border-radius: 20px;
+            background-color: var(--light-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-search .input-group-text {
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+        }
+
+        .sidebar-search .form-control {
+            border: none;
+            background-color: transparent;
+            padding: 0.5rem 1rem;
+            color: var(--text-color);
+        }
+
+        .sidebar-search .form-control:focus {
+            box-shadow: none;
+            border-color: var(--primary-color);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem;
+            background-color: var(--background-color);
+        }
+
+        .sidebar-footer .btn {
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .sidebar-footer .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .content-wrapper {
+            min-height: calc(100vh - 150px);
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-dismissible .btn-close {
+            padding: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .alert-dismissible .btn-close:hover {
+            opacity: 1;
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            background-color: var(--background-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: var(--light-color);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            min-height: calc(100vh - 150px);
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-dismissible .btn-close {
+            padding: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .alert-dismissible .btn-close:hover {
+            opacity: 1;
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            background-color: var(--background-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: var(--light-color);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+
+        .nav-link {
+            color: var(--text-color) !important;
+            padding: 0.75rem 1rem !important;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-radius: 8px;
+            margin: 0.25rem 0;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            background-color: var(--light-color);
+            transform: translateX(5px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+            width: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            background-color: var(--light-color);
+            border-left: 3px solid var(--primary-color);
+            margin-left: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-link.active i {
+            color: var(--primary-color) !important;
+            transform: scale(1.1);
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem;
+            background-color: var(--background-color);
+        }
+
+        .sidebar-footer .btn {
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-footer .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .border-end {
+            border-right: 1px solid var(--border-color);
+        }
+
+        .fs-4 {
+            font-size: 1.25rem;
+        }
+
+        .fw-bold {
+            font-weight: 600;
+        }
+
+        .container-fluid {
+            padding: 0;
+        }
+
+        .container-fluid > .row {
+            margin-right: 0;
+            margin-left: 0;
+        }
+
+        .main-content {
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+        }
+
+        .main-content > .container-fluid {
+            max-width: 100%;
+            padding: 0 1rem;
+        }
+
+        .card {
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .card-header {
+            background-color: var(--background-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+    </style>
 </body>
 </html>

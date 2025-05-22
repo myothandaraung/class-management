@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('type')->nullable();
             $table->boolean('is_deleted')->nullable();
-            $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         
@@ -27,6 +26,7 @@ return new class extends Migration
             $table->foreignId('class_id')->constrained()->onDelete('cascade');
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
             $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
+            $table->boolean('is_deleted')->nullable();
             $table->timestamps();
         });
     }

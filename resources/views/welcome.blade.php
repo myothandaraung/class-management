@@ -148,25 +148,31 @@
             <h2 class="text-center mb-5">主要機能</h2>
             <div class="row">
                 <div class="col-md-4">
+                    <a href="{{ route('students.index') }}" style="text-decoration: none; color: inherit;">
                     <div class="feature-card">
                         <i class="fas fa-users feature-icon"></i>
                         <h3>生徒管理</h3>
                         <p>生徒の詳細情報、成績、出席状況を一元管理</p>
                     </div>
+                    </a>
                 </div>
                 <div class="col-md-4">
+                    <a href="{{ route('students.index') }}" style="text-decoration: none; color: inherit;">
                     <div class="feature-card">
                         <i class="fas fa-chalkboard-teacher feature-icon"></i>
                         <h3>教師管理</h3>
                         <p>教師のスケジュール、評価、資格情報を管理</p>
                     </div>
+                    </a>
                 </div>
                 <div class="col-md-4">
+                    <a href="{{ route('students.index') }}" style="text-decoration: none; color: inherit;">
                     <div class="feature-card">
                         <i class="fas fa-book feature-icon"></i>
                         <h3>コース管理</h3>
                         <p>コースの設定、スケジュール、進捗管理</p>
                     </div>
+                    </a>
                 </div>
             </div>
         </div>
