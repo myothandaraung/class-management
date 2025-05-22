@@ -7,14 +7,8 @@
         <a href="{{ route('classes.create') }}" class="btn btn-primary"><i class="fas fa-plus me-2"></i>クラスの追加</a>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="card">
-    <div class="card-body">
+        <div class="card-body">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -32,10 +26,17 @@
                         <tr>
                             <td>{{ $class->name }}</td>
                             <td class="text-center">
-                                <img src="{{ $class->thumbnail ? url('storage/' . $class->thumbnail) : asset('images/default-avatar.png') }}" 
-                                     alt="{{ $class->name }}" 
-                                     class="img-thumbnail" 
-                                     style="width: 50px; height: 50px; object-fit: cover;">
+                                <div class="class-image-container">
+                                    @if($class->thumbnail)
+                                        <img src="{{ $class->thumbnail ? url('storage/' . $class->thumbnail) : asset('images/default-avatar.png') }}" 
+                                            class="class-image" 
+                                            alt="クラス画像">
+                                    @else
+                                        <div class="class-image-placeholder">
+                                            <i class="fas fa-image text-muted"></i>
+                                        </div>
+                                    @endif
+                                </div>
                             </td>
                             <td>{{ $class->course->name }}</td>
                             <td>{{ $class->description }}</td>
@@ -52,7 +53,7 @@
                                     <form action="{{ route('classes.destroy', $class) }}" method="POST" style="display: inline-block; margin-bottom: 0;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteSubject(event, {{ $class->id }})" title="削除">
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteClass(event, {{ $class->id }})" title="削除">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -66,3 +67,53 @@
     </div>
 </div>
 @endsection
+<style>
+    .class-image-container {
+        width: 60px;
+        height: 60px;
+        margin: auto;
+    }
+    
+    .class-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .class-image:hover {
+        transform: scale(1.1);
+    }
+    
+    .class-image-placeholder {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        border: 2px solid #dee2e6;
+    }
+    
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function deleteClass(event, id) {
+        event.preventDefault();
+        
+        Swal.fire({
+            title: '確認',
+            text: 'このクラスを削除しますか？',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '削除',
+            confirmButtonColor: '#d33',
+            cancelButtonText: 'キャンセル',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.closest('form').submit();
+            }
+        });
+    }
+</script>
