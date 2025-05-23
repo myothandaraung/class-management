@@ -383,7 +383,7 @@
                         @endif
 
                         <!-- Form Validation Errors -->
-                        @if($errors->any())
+                        {{-- @if($errors->any())
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <ul class="mb-0">
                                     @foreach($errors->all() as $error)
@@ -392,7 +392,7 @@
                                 </ul>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
-                        @endif
+                        @endif --}}
 
                         <!-- Main Content -->
                         <div class="content-wrapper" style="min-height: calc(100vh - 150px);">

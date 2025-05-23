@@ -31,10 +31,18 @@
                                 <tr>
                                     <td class="text-center">{{ $teacher->id }}</td>
                                     <td class="text-center">
-                                        <img src="{{ $teacher->thumbnail ? url('storage/' . $teacher->thumbnail) : asset('images/default-avatar.png') }}" 
-                                             alt="{{ $teacher->full_name }}" 
-                                             class="img-thumbnail" 
-                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                        <div class="teacher-image-container">
+                                            @if($teacher->thumbnail)
+                                                <img src="{{ $teacher->thumbnail ? url('storage/' . $teacher->thumbnail) : asset('images/default-avatar.png') }}" 
+                                                     alt="{{ $teacher->full_name }}" 
+                                                     class="teacher-image rounded-3">
+                                            @else
+                                                <div class="teacher-image-placeholder rounded-3">
+                                                    <i class="fas fa-user text-muted"></i>
+                                                    <p class="text-muted mt-2">画像がありません</p>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="text-center">{{ $teacher->full_name }}</td>
                                     <td class="text-center">{{ $teacher->user->email }}</td>
@@ -49,7 +57,7 @@
                                             <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-sm btn-warning" title="編集">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" style="display: inline-block; margin-bottom: 0;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="button" class="btn btn-sm btn-danger" onclick="deleteTeacher(event, {{ $teacher->id }})" title="削除">
@@ -81,11 +89,45 @@
 </div>
 @endsection
 
-@push('styles')
 <link rel="stylesheet" href="{{ asset('css/common.css') }}">
-@endpush
+<style>
+    .teacher-image-container {
+        width: 50px;
+        height: 50px;
+        margin: auto;
+    }
+    
+    .teacher-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .teacher-image:hover {
+        transform: scale(1.1);
+    }
+    
+    .teacher-image-placeholder {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        border: 2px solid #dee2e6;
+    }
+    
+    .table {
+        --bs-table-hover-bg: rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-group .btn {
+        padding: 0.3rem 0.6rem;
+    }
+</style>
 
-@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function deleteTeacher(event, teacherId) {
@@ -107,4 +149,3 @@
         });
     }
 </script>
-@endpush

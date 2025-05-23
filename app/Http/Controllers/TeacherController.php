@@ -84,7 +84,7 @@ class TeacherController extends Controller
      */
     public function show(string $id)
     {
-        $teacher = \App\Models\Teacher::findOrFail($id);
+        $teacher = Teacher::findOrFail($id);
         return view('teachers.show', compact('teacher'));
     }
 
@@ -123,7 +123,7 @@ class TeacherController extends Controller
         if($request->filled('thumbnail')){
             $rules['thumbnail'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048';
         }
-        if ($request->filled('password')) {
+        if ($request->filled('current_password') || $request->filled('password')) {
             $rules['current_password'] = ['required', 'current_password'];
             $rules['password'] = ['required', 'string', 'min:8', 'confirmed'];
             $rules['password_confirmation'] = ['required', 'string'];
@@ -165,7 +165,7 @@ class TeacherController extends Controller
             'department_id' => $validated['department_id'],
         ]);
 
-        return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully');
+        return redirect()->route('teachers.index')->with('success', '教師の情報を更新しました');
     }
 
     /**
@@ -173,9 +173,12 @@ class TeacherController extends Controller
      */
     public function destroy(string $id)
     {
-        $teacher = \App\Models\Teacher::findOrFail($id);
-        $teacher->delete();
+        $teacher = Teacher::findOrFail($id);
+        $user = User::findOrFail($teacher->user_id);
+        $user->update([
+            'is_deleted' => true,
+        ]);
 
-        return redirect()->route('teachers.index')->with('success', 'Teacher deleted successfully');
+        return redirect()->route('teachers.index')->with('success', '教師の情報を削除しました');
     }
 }
