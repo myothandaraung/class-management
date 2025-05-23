@@ -289,7 +289,7 @@
     </style>
 </head>
 <body style="display: flex;">
-    <div class="d-flex flex-column flex-shrink-0 bg-white border-end" style="width: 280px; height: 100vh; overflow-y: auto; position: fixed;">
+    <div class="d-flex flex-column flex-shrink-0 bg-white border-end" style="width: 304px; height: 100vh; overflow-y: auto; position: fixed;">
         <div class="sidebar-header">
             <div class="d-flex align-items-center p-4">
                 <i class="fas fa-graduation-cap text-primary me-3"></i>
@@ -330,6 +330,10 @@
                 <a href="{{ route('departments.index') }}" class="nav-link">
                     <i class="fas fa-building text-primary me-3"></i>
                     <span>部署一覧</span>
+                </a>
+                <a href="{{ route('classSubjectTeachers.index') }}" class="nav-link">
+                    <i class="fas fa-book text-primary me-3"></i>
+                    <span>クラス-科目-教師一覧</span>
                 </a>
             </div>
         </div>
@@ -479,11 +483,6 @@
             transform: translateY(-2px);
         }
 
-        /* Main Content Styles */
-        .main-content {
-            min-height: 100vh;
-            padding: 2rem 0;
-        }
 
         .content-wrapper {
             min-height: calc(100vh - 150px);
@@ -546,12 +545,6 @@
             padding: 0.5rem 1.5rem;
             border-radius: 0.5rem;
             font-weight: 500;
-        }
-
-        /* Main Content Styles */
-        .main-content {
-            min-height: calc(100vh - 150px);
-            padding: 2rem 0;
         }
 
         .page-title {
@@ -694,7 +687,7 @@
         }
 
         .main-content {
-            padding: 2rem 0;
+            padding: 2rem 2rem;
             min-height: calc(100vh - 100px);
         }
 

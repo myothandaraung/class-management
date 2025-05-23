@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\ClassSubjectTeacherController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -72,6 +73,15 @@ Route::prefix('classes')->name('classes.')->group(function () {
     Route::delete('/delete/{class}', [ClassController::class, 'destroy'])->name('destroy');
 });
 
+Route::prefix('classSubjectTeachers')->name('classSubjectTeachers.')->group(function () {
+    Route::get('', [ClassSubjectTeacherController::class, 'index'])->name('index');
+    Route::get('/create', [ClassSubjectTeacherController::class, 'create'])->name('create');
+    Route::post('/add', [ClassSubjectTeacherController::class, 'store'])->name('store');
+    Route::get('/show/{classSubjectTeacher}', [ClassSubjectTeacherController::class, 'show'])->name('show');
+    Route::get('/edit/{classSubjectTeacher}', [ClassSubjectTeacherController::class, 'edit'])->name('edit');
+    Route::put('/update/{classSubjectTeacher}', [ClassSubjectTeacherController::class, 'update'])->name('update');
+    Route::delete('/delete/{classSubjectTeacher}', [ClassSubjectTeacherController::class, 'destroy'])->name('destroy');
+});
 
 // Student Routes
 require __DIR__.'/student.php';
