@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
         });
         
-        Schema::create('class_subject_teacher', function (Blueprint $table) {
+        Schema::create('class_subject_teachers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('class_id')->constrained()->onDelete('cascade');
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
