@@ -120,30 +120,6 @@
                         </div>
 
                         <div class="col-12">
-                            <label class="form-label fw-bold">関連教師 *</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-0">
-                                    <i class="fas fa-user"></i>
-                                </span>
-                                <select class="form-select border-0 shadow-sm @error('teachers') is-invalid @enderror" 
-                                        id="teachers" 
-                                        name="teachers[]" 
-                                        multiple 
-                                        required>
-                                    @foreach($teachers as $teacher)
-                                        <option value="{{ $teacher->id }}" 
-                                                {{ in_array($teacher->id, old('teachers', $subject->teachers->pluck('id')->toArray())) ? 'selected' : '' }}>
-                                            {{ $teacher->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('teachers')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
                                 <a href="{{ route('subjects.index') }}" class="btn btn-secondary">
                                     <i class="fas fa-times me-1"></i> キャンセル

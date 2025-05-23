@@ -97,15 +97,6 @@ class DepartmentController extends Controller
 
         return redirect()->route('departments.index')
             ->with('success', '部署を削除しました');
-        // Log::info("delete");
-        // Log::info($department_id);
-        // $department = Department::findOrFail($department_id);
-        // Log::info($department);
-        // $department->update([
-        //     'is_deleted' => true,
-        // ]);
-        // Log::info($department);
-        // return redirect()->route('departments.index')->with('success', '部署を削除しました');
     }
 }
 

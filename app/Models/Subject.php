@@ -15,9 +15,8 @@ class Subject extends Model
         'type',
         'is_deleted',
     ];
-
-    public function teachers()
+    public function courses()
     {
-        return $this->belongsToMany(Teacher::class, 'class_subject_teacher');
+        return $this->belongsToMany(Course::class, 'course_subjects');
     }
 }

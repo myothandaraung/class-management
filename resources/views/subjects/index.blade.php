@@ -23,7 +23,6 @@
                                     <th class="text-center">種類</th>
                                     <th class="text-center">説明</th>
                                     <th class="text-center">関連コース</th>
-                                    <th class="text-center">関連教師</th>
                                     <th class="text-center">操作</th>
                                 </tr>
                             </thead>
@@ -39,15 +38,6 @@
                                         <div class="d-flex flex-wrap gap-2">
                                             @forelse($subject->courses as $course)
                                                 <span class="badge bg-primary">{{ $course->name }}</span>
-                                            @empty
-                                                <span class="text-muted">なし</span>
-                                            @endforelse
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="d-flex flex-wrap gap-2">
-                                            @forelse($subject->teachers as $teacher)
-                                                <span class="badge bg-secondary">{{ $teacher->name }}</span>
                                             @empty
                                                 <span class="text-muted">なし</span>
                                             @endforelse
@@ -91,7 +81,6 @@
 </div>
 @endsection
 
-@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function deleteSubject(event, subjectId) {
@@ -102,6 +91,8 @@ function deleteSubject(event, subjectId) {
         text: 'この操作は取り消せません',
         icon: 'warning',
         showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
         confirmButtonText: '削除',
         cancelButtonText: 'キャンセル',
         reverseButtons: true
@@ -112,4 +103,3 @@ function deleteSubject(event, subjectId) {
     });
 }
 </script>
-@endpush

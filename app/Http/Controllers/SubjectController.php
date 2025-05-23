@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\Course;
 use App\Models\Teacher;
+use App\Models\CourseSubject;
 use Illuminate\Support\Facades\Log;
 
 class SubjectController extends Controller
@@ -15,7 +16,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::with(['courses', 'teachers'])->get();
+        $subjects = Subject::with('courses')->where('is_deleted', null)->get();
         return view('subjects.index', compact('subjects'));
     }
 
@@ -45,20 +46,18 @@ class SubjectController extends Controller
             'type' => 'required|string|in:必修,選択,特別',
             'description' => 'nullable|string',
             'courses' => 'required|array|min:1',
-            'courses.*' => 'exists:courses,id',
-            'teachers' => 'required|array|min:1',
-            'teachers.*' => 'exists:teachers,id',
+            'courses.*' => 'exists:courses,id'
         ]);
-
+        
         $subject = Subject::create([
             'name' => $validated['name'],
             'code' => $validated['code'],
             'type' => $validated['type'],
             'description' => $validated['description'],
+            'is_deleted' => null,
         ]);
 
         $subject->courses()->attach($validated['courses']);
-        $subject->teachers()->attach($validated['teachers']);
 
         return redirect()->route('subjects.index')
             ->with('success', '科目を追加しました');
@@ -69,7 +68,7 @@ class SubjectController extends Controller
      */
     public function show(Subject $subject)
     {
-        $subject->load('courses', 'teachers');
+        $subject->load('courses');
         return view('subjects.show', compact('subject'));
     }
 
@@ -79,8 +78,7 @@ class SubjectController extends Controller
     public function edit(Subject $subject)
     {
         $courses = Course::all();
-        $teachers = Teacher::all();
-        return view('subjects.edit', compact('subject', 'courses', 'teachers'));
+        return view('subjects.edit', compact('subject', 'courses'));
     }
 
     /**
@@ -95,8 +93,6 @@ class SubjectController extends Controller
             'description' => 'nullable|string',
             'courses' => 'required|array|min:1',
             'courses.*' => 'exists:courses,id',
-            'teachers' => 'required|array|min:1',
-            'teachers.*' => 'exists:teachers,id',
         ]);
 
         $subject->update([
@@ -105,9 +101,7 @@ class SubjectController extends Controller
             'type' => $validated['type'],
             'description' => $validated['description'],
         ]);
-
         $subject->courses()->sync($validated['courses']);
-        $subject->teachers()->sync($validated['teachers']);
 
         return redirect()->route('subjects.index')
             ->with('success', '科目を更新しました');
@@ -118,9 +112,11 @@ class SubjectController extends Controller
      */
     public function destroy(Subject $subject)
     {
-        $subject->courses()->detach();
-        $subject->teachers()->detach();
-        $subject->delete();
+        $subject->is_deleted = true;
+        $subject->save();
+        CourseSubject::where('subject_id', $subject->id)->update([
+            'is_deleted' => true,
+        ]);
 
         return redirect()->route('subjects.index')
             ->with('success', '科目を削除しました');

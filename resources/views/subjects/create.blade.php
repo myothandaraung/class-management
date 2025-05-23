@@ -114,7 +114,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-12">
+                        {{-- <div class="col-12">
                             <label class="form-label fw-bold">関連教師 *</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-0">
@@ -135,7 +135,7 @@
                             @error('teachers')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class="col-12 text-end">
                             <button type="submit" class="btn btn-primary px-4 py-2">
