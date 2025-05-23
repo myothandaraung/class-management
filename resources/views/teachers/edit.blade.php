@@ -199,10 +199,12 @@
                                class="form-control border-0 shadow-sm @error('thumbnail') is-invalid @enderror" 
                                id="thumbnail" 
                                name="thumbnail" 
-                               accept="image/*">
+                               accept="image/*"
+                               onchange="previewImage(event)">
                         @if($teacher->thumbnail)
                             <div class="mt-2">
                                 <img src="{{ Storage::url($teacher->thumbnail) }}" 
+                                     id="thumbnailPreview"
                                      alt="{{ $teacher->full_name }}" 
                                      class="img-thumbnail" 
                                      style="width: 100px; height: 100px; object-fit: cover;">
@@ -272,3 +274,16 @@
     </div>
 </div>
 @endsection
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('thumbnailPreview');
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>

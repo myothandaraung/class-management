@@ -152,8 +152,6 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        Log::info('Student deleted');
-        Log::info($id);
         $student = Student::findOrFail($id);
         $user = User::findOrFail($student->user_id);
         $user->update([
