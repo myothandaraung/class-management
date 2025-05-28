@@ -7,8 +7,8 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationMail;
 class StudentController extends Controller
 {
     /**
@@ -16,7 +16,6 @@ class StudentController extends Controller
      */
     public function index()
     {
-        Log::info('Students index page');
         $students = Student::with('user')->whereHas('user', function($query){
             $query->where('is_deleted', null);
         })->latest()->paginate(10);
@@ -36,7 +35,6 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request->all());
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -71,7 +69,7 @@ class StudentController extends Controller
             'thumbnail' => $filename,
             'user_id' => $user->id
         ]);
-
+        Mail::to($validated['email'])->send(new RegistrationMail('student_registration',$user));
         return redirect()->route('students.index')
             ->with('success', '生徒の作成は成功した。');
     }
@@ -99,7 +97,6 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Log::info($request->all());
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
