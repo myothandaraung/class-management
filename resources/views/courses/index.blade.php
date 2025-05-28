@@ -97,34 +97,13 @@
                         <p class="mb-0 text-muted">{{ Str::limit($course->description, 100) }}</p>
                     </div>
                     @endif
+                    
                     <div class="mb-3">
-                        <h6 class="text-muted mb-2">関連科目</h6>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-primary bg-opacity-10 text-primary">
-                                This
-                            </span>
-                            <span class="badge bg-primary bg-opacity-10 text-primary">
-                                That
-                            </span>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <h6 class="text-muted mb-2">教師</h6>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="badge bg-secondary bg-opacity-10 text-secondary">
-                                Aye
-                            </span>
-                            <span class="badge bg-secondary bg-opacity-10 text-secondary">
-                                Nye
-                            </span>
-                        </div>
-                    </div>
-                    {{-- <div class="mb-3">
                         <h6 class="text-muted mb-2">関連科目</h6>
                         <div class="d-flex flex-wrap gap-2">
                             @forelse($course->subjects as $subject)
                                 <span class="badge bg-primary bg-opacity-10 text-primary">
-                                    {{ $subject->name }}
+                                    {{ $subject['name'] }}
                                 </span>
                             @empty
                                 <span class="text-muted">なし</span>
@@ -133,17 +112,17 @@
                     </div>
 
                     <div class="mb-3">
-                        <h6 class="text-muted mb-2">教師</h6>
+                        <h6 class="text-muted mb-2">クラス</h6>
                         <div class="d-flex flex-wrap gap-2">
-                            @forelse($course->teachers as $teacher)
+                            @forelse($course->classes as $class)
                                 <span class="badge bg-secondary bg-opacity-10 text-secondary">
-                                    {{ $teacher->name }}
+                                    {{ $class['name'] }}
                                 </span>
                             @empty
                                 <span class="text-muted">なし</span>
                             @endforelse
                         </div>
-                    </div> --}}
+                    </div>
 
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">

@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Department;
+use App\Models\ClassModel;
 class CourseController extends Controller
 {
     /**
@@ -15,6 +16,14 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::with(['department'])->get();
+        $courses->each(function($course){
+            $class = ClassModel::where('course_id', $course->id)->get();
+            $subjects = Subject::whereHas('courses', function($query) use ($course){
+                            $query->where('course_id', $course->id);
+                        })->where('is_deleted', null)->get();
+            $course->subjects = $subjects->toArray();
+            $course->classes = $class->toArray();
+        });
         return view('courses.index', compact('courses'));
     }
 
