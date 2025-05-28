@@ -7,8 +7,6 @@ use App\Models\Course;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Department;
-use Illuminate\Support\Facades\Log;
-
 class CourseController extends Controller
 {
     /**
@@ -38,7 +36,6 @@ class CourseController extends Controller
     public function create()
     {
         $departments = Department::where('is_deleted', null)->get();
-        Log::info($departments);
         return view('courses.create', compact('departments'));
     }
 
@@ -54,7 +51,6 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'year' => 'required|integer|min:' . (date('Y') - 5) . '|max:' . date('Y'),
         ]);
-        Log::info($validated);
         $course = Course::create([
             'name' => $validated['name'],
             'department_id' => $validated['department_id'],
@@ -101,9 +97,7 @@ class CourseController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Course $course)
-    {
-        
-        Log::info($course);
+    {     
         $course->update([
             'is_deleted' => true,
         ]);

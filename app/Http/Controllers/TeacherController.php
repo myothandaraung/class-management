@@ -8,8 +8,8 @@ use App\Models\User;
 use App\Models\Department;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationMail;
 class TeacherController extends Controller
 {
     /**
@@ -37,7 +37,6 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request->all());
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -75,7 +74,7 @@ class TeacherController extends Controller
             'thumbnail' => $filename,
             'user_id' => $user->id
         ]);
-
+        Mail::to($validated['email'])->send(new RegistrationMail('teacher_registration',$user));
         return redirect()->route('teachers.index')->with('success', '教師を追加しました');
     }
 
@@ -103,10 +102,7 @@ class TeacherController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Log::info($id);
-        Log::info($request->all());
         $user = User::join('teachers', 'users.id', '=', 'teachers.user_id')->where('teachers.id', $id)->first();
-        Log::info($user);
         $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',

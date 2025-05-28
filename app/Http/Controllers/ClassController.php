@@ -6,7 +6,6 @@ use App\Models\ClassModel;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 class ClassController extends Controller
 {
@@ -39,8 +38,6 @@ class ClassController extends Controller
         if ($request->hasFile('thumbnail')) {
             $filename = Storage::disk('public')->putFile('classes', $request->file('thumbnail'));
         }
-        Log::info($validated);
-        Log::info($filename);
         ClassModel::create([
             'name' => $validated['name'],
             'description' => $validated['description'],

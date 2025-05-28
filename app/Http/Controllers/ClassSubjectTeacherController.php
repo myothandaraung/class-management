@@ -7,7 +7,6 @@ use App\Models\ClassSubjectTeacher;
 use App\Models\ClassModel;
 use App\Models\Subject;
 use App\Models\Teacher;
-use Illuminate\Support\Facades\Log;
 
 class ClassSubjectTeacherController extends Controller
 {
@@ -24,13 +23,11 @@ class ClassSubjectTeacherController extends Controller
         $classes = ClassModel::whereNull('is_deleted')->get();
         $subjects = Subject::whereNull('is_deleted')->get();
         $teachers = Teacher::select('teachers.id', 'teachers.first_name', 'teachers.last_name')->join('users', 'teachers.user_id', '=', 'users.id')->whereNull('users.is_deleted')->get();
-        Log::info($teachers);
         return view('classSubjectTeachers.create', compact('classes', 'subjects', 'teachers'));
     }
 
     public function store(Request $request)
     {
-        Log::info($request->all());
         $validated = $request->validate([
             'class_id' => 'required|exists:classes,id',
             'subject_id' => 'required|exists:subjects,id',

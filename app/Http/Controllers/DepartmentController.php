@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Department;
-use Illuminate\Support\Facades\Log;
-
 class DepartmentController extends Controller
 {
     /**
@@ -31,8 +29,6 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request->all());
-        Log::info(gettype($request->file('thumbnail')));
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
