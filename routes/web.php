@@ -8,6 +8,8 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\ClassSubjectTeacherController;
+use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -82,6 +84,21 @@ Route::prefix('classSubjectTeachers')->name('classSubjectTeachers.')->group(func
     Route::put('/update/{classSubjectTeacher}', [ClassSubjectTeacherController::class, 'update'])->name('update');
     Route::delete('/delete/{classSubjectTeacher}', [ClassSubjectTeacherController::class, 'destroy'])->name('destroy');
 });
+
+Route::prefix('enrollments')->name('enrollments.')->group(function () {
+    Route::get('', [EnrollmentController::class, 'index'])->name('index');
+    Route::get('/create', [EnrollmentController::class, 'create'])->name('create');
+    Route::post('/add', [EnrollmentController::class, 'store'])->name('store');
+    Route::get('/show/{enrollment}', [EnrollmentController::class, 'show'])->name('show');
+    Route::get('/edit/{enrollment}', [EnrollmentController::class, 'edit'])->name('edit');
+    Route::put('/update/{enrollment}', [EnrollmentController::class, 'update'])->name('update');
+    Route::delete('/delete/{enrollment}', [EnrollmentController::class, 'destroy'])->name('destroy');
+});
+Route::post('/payment',[PaymentController::class,'EnrollmentPayment'])->name('payment');
+Route::get('/payment/status',[PaymentController::class,'EnrollmentPaymentStatus'])->name('payment.status');
+Route::get('/thank-you',[PaymentController::class, 'EnrollmentPaymentSuccess'])->name('EnrollmentPaymentSuccess');
+
+
 
 // Student Routes
 require __DIR__.'/student.php';
