@@ -23,21 +23,18 @@ class EnrollmentController extends Controller
         Log::info($classes->toArray());
         return view('enrollments.create',compact('students','classes','stripe_key'));
     }
-    public function store(Request $request)
+
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'student_id' => 'required',
-            'class_id' => 'required',
-            'enrollment_date' => 'required',
+            'status' => 'required',
         ]);
         Log::info($request->all());
-        // Enrollment::create([
-        //     'student_id' => $request->student_id,
-        //     'class_id' => $request->class_id,
-        //     'enrollment_date' => $request->enrollment_date,
-        //     'status' => 'active',
-        // ]);
-
-        return redirect()->route('enrollments.index')->with('success', 'Enrollment created successfully.');
+        $enrollment = Enrollment::findOrFail($id);
+        $enrollment->update([
+            'status' => $request->status
+        ]);
+        return redirect()->route('enrollments.index')->with('success', '編集しました。');
     }
+
 }

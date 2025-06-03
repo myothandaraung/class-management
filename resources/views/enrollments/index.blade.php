@@ -26,23 +26,22 @@
                             <tbody>
                                 @foreach($enrollments as $enrollment)
                                     <tr>
-                                        <td>{{ $enrollment->student->name }}</td>
-                                        <td>{{ $enrollment->class->name }}</td>
-                                        <td class="text-end">{{ number_format($enrollment->class->price) }}円</td>
-                                        <td class="text-center">{{ $enrollment->enrollment_date->format('Y-m-d') }}</td>
+                                        <td class="text-center">{{ $enrollment->student->getFullNameAttribute() }}</td>
+                                        <td class="text-center">{{ $enrollment->class->name }}</td>
+                                        <td class="text-center">{{ number_format($enrollment->class->price) }}円</td>
+                                        <td class="text-center">{{ $enrollment->enrollment_date }}</td>
                                         <td class="text-center">
-                                            <span class="badge bg-{{ $enrollment->status === 'active' ? 'success' : 'secondary' }}">
-                                                {{ $enrollment->status }}
+                                            <span class="alert alert-{{ $enrollment->status === 'active' ? 'success' : 'secondary' }} p-1">
+                                                {{ $enrollment->status === 'active' ? '有効' : '無効' }}
                                             </span>
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group">
-                                                <a href="{{ route('enrollments.edit', $enrollment->id) }}" class="btn btn-sm btn-outline-primary me-1">Edit</a>
-                                                <form action="{{ route('enrollments.destroy', $enrollment->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                                </form>
+                                                <button type="button" class="btn btn-sm btn-outline-primary me-1" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#statusModal{{ $enrollment->id }}">
+                                                    編集ステータス
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -55,4 +54,51 @@
         </div>
     </div>
 </div>
+
+<!-- Status Edit Modal -->
+@php
+    $modalId = 'statusModal';
+@endphp
+@foreach($enrollments as $enrollment)
+<div class="modal fade" id="{{ $modalId }}{{ $enrollment->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ステータス編集</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ route('enrollments.update', $enrollment->id) }}">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">現在のステータス</label>
+                        <div class="text-center">
+                            <span class="alert alert-{{ $enrollment->status === 'active' ? 'success' : 'secondary' }} p-1">
+                                {{ $enrollment->status === 'active' ? '有効' : '無効' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">新しいステータス</label>
+                        <select class="form-select" name="status" required>
+                            <option value="active" {{ $enrollment->status === 'active' ? 'selected' : '' }}>
+                                <span class="bg-success">有効</span>
+                            </option>
+                            <option value="inactive" {{ $enrollment->status === 'inactive' ? 'selected' : '' }}>
+                                <span class="bg-secondary">無効</span>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">更新</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
+
 @endsection

@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use App\Models\Enrollment;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EnrollmentPaymentSuccessMail;
+use App\Models\Student;
 
 class PaymentController extends Controller
 {
@@ -25,17 +28,6 @@ class PaymentController extends Controller
         ]);
         Log::info($request->all());
         try {
-            // $charge = Charge::create([
-            //     'amount' => $request->price * 100,
-            //     'currency' => 'jpy',
-            //     'source' => $request->stripeToken,
-            //     'description' => 'Enrollment Payment',
-            // ]);
-            // return response()->json([
-            //     'status' => 'success',
-            //     'message' => 'Payment successful',
-            //     'data' => $charge,
-            // ]);
             $class_name = ClassModel::find($request->class_id)->name;
             $session = Session::create([
                 'payment_method_types' => ['card'],
@@ -56,12 +48,6 @@ class PaymentController extends Controller
                 // 'cancel_url' => route('enrollments.add', ['status' => 'Your Payment is failed', 'offer_id' => $offer->id, 'talkroom_id' => $request->talkroom_id, 'health' => 'failed']),
                 'customer_email' => env('ADMIN_MAIL'),
             ]);
-            Log::info($session);
-            // return response()->json([
-            //     'status' => '200',
-            //     'message' => 'Payment successful',
-            //     'data' => $session,
-            // ]);
             return response()->json(['id' => $session->id]);
 
         } catch (\Exception $e) {
@@ -88,14 +74,15 @@ class PaymentController extends Controller
                 'enrollment_date' => $request->enrollment_date,
                 'status' => 'active',
             ]);
-            Payment::create([
+            $payment = Payment::create([
                 'enrollment_id' => $enrollment->id,
                 'amount' => $request->price,
                 'payment_date' => $request->enrollment_date,
                 'payment_method' => 'stripe',
                 'payment_status' => $request->health,
             ]);
-           
+            $student = Student::join('users', 'students.user_id', '=', 'users.id')->where('users.is_deleted', null)->where('students.id', $request->student_id)->first();
+            Mail::to($student->email)->send(new EnrollmentPaymentSuccessMail('Enrollment_payment_success',$payment,$enrollment,$student));
             return redirect()->route('EnrollmentPaymentSuccess');
         } catch (\Exception $e) {
             return response()->json([
