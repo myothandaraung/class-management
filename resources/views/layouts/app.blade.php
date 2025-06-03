@@ -311,6 +311,10 @@
                     <i class="fas fa-book-reader text-primary me-3"></i>
                     <span>クラス一覧</span>
                 </a>
+                <a href="{{ route('enrollments.index') }}" class="nav-link">
+                    <i class="fas fa-user-plus text-primary me-3"></i>
+                    <span>登録一覧</span>
+                </a>
                 <a href="{{ route('students.index') }}" class="nav-link">
                     <i class="fas fa-user-graduate text-primary me-3"></i>
                     <span>生徒一覧</span>
