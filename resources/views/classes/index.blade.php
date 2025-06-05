@@ -9,6 +9,26 @@
 
     <div class="card">
         <div class="card-body">
+            <!-- Search Form -->
+            <div class="mb-4">
+                <form action="{{ route('classes.index') }}" method="GET" class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" placeholder="名前またはメールアドレスで検索" value="{{ request('search') }}">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i> 検索
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ route('classes.index') }}" class="btn btn-secondary">
+                                <i class="fas fa-sync-alt"></i> リセット
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
