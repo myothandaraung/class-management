@@ -9,12 +9,21 @@ use Illuminate\Support\Facades\Storage;
 
 class ClassController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $classes = ClassModel::with(['course'])
-            ->whereNull('is_deleted')
-            ->get();
-        
+        $query = ClassModel::with(['course'])
+            ->whereNull('is_deleted');
+        if($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                ->orwhere('description','like',"%{$search}%")
+                ->orWhereHas('course', function($query) use ($search){
+                    $query->where('name','like',"%{$search}%");
+                });
+            });
+        }
+        $classes = $query->latest()->paginate(10);
         return view('classes.index', compact('classes'));
     }
 
