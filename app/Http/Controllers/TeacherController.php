@@ -15,11 +15,22 @@ class TeacherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teachers = Teacher::with('user')->whereHas('user', function($query){
+        $query = Teacher::with('user')->whereHas('user', function($query){
             $query->where('is_deleted', null);
-        })->latest()->paginate(10);;
+        });
+        if($request->has('search')) {
+            $search = $request->search;;
+            $query->where(function($query) use ($search){
+                $query->where('first_name','like',"%{$search}%")
+                ->orWhere('last_name','like',"%{$search}%")
+                ->orWhereHas('user',function($query) use ($search) {
+                    $query->where('email','like',"%{$search}%");
+                });
+            });
+        }
+        $teachers = $query->latest()->paginate(10);
         return view('teachers.index', compact('teachers'));
     }
 
