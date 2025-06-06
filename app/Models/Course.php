@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\CourseSubject;
 
 class Course extends Model
 {
@@ -27,7 +28,10 @@ class Course extends Model
     // {
     //     return $this->belongsToMany(Student::class);
     // }
-
+    public function courseSubjects()
+    {
+        return $this->hasMany(CourseSubject::class);
+    }
     public function subjects()
     {
         return $this->belongsToMany(Subject::class);

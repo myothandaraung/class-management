@@ -7,6 +7,8 @@ use App\Models\Course;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Department;
+use App\Models\ClassSubjectTeacher;
+use Illuminate\Support\Facades\Log;
 class CourseController extends Controller
 {
     /**
@@ -14,8 +16,28 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with(['department'])->get();
-        return view('courses.index', compact('courses'));
+        $departments = Department::where('is_deleted', null)->get();
+        $courses = Course::with(['department', 'courseSubjects'])->where('courses.is_deleted', null)->get();
+        Log::info($courses->toArray());
+        Log::info('after');
+        foreach ($courses as $course) {
+            if ($course->courseSubjects) {
+                $subjects = [];
+                $teachers = [];
+                foreach ($course->courseSubjects as $courseSubject) {
+                    $subjects[] = Subject::where('id', $courseSubject->subject_id)->first();
+                    $classSubjectTeachers = ClassSubjectTeacher::with('teacher')->where('subject_id', $courseSubject->subject_id)->get();
+                    foreach ($classSubjectTeachers as $classSubjectTeacher) {
+                        $teachers[] = $classSubjectTeacher->teacher;
+                    }
+                }
+                $course->subjects = $subjects;
+                $course->teachers = $teachers;
+            }
+        }
+        
+        Log::info($courses->toArray());
+        return view('courses.index', compact('courses', 'departments'));
     }
 
     /**

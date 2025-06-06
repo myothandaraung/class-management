@@ -12,6 +12,39 @@
             </a>
         </div>
     </div>
+    <div class="row mb-4">
+        <div class="col-12">
+            <form action="{{ route('courses.index') }}" method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" name="search" class="form-control" 
+                               placeholder="コース名を検索" 
+                               value="{{ request('search') }}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select name="department_id" class="form-select">
+                        <option value="">全ての学部</option>
+                        @foreach($departments as $department)
+                            <option value="{{ $department->id }}" 
+                                    {{ request('department_id') == $department->id ? 'selected' : '' }}>
+                                {{ $department->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter me-2"></i> 検索
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -97,7 +130,7 @@
                         <p class="mb-0 text-muted">{{ Str::limit($course->description, 100) }}</p>
                     </div>
                     @endif
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <h6 class="text-muted mb-2">関連科目</h6>
                         <div class="d-flex flex-wrap gap-2">
                             <span class="badge bg-primary bg-opacity-10 text-primary">
@@ -107,8 +140,8 @@
                                 That
                             </span>
                         </div>
-                    </div>
-                    <div class="mb-3">
+                    </div> --}}
+                    {{-- <div class="mb-3">
                         <h6 class="text-muted mb-2">教師</h6>
                         <div class="d-flex flex-wrap gap-2">
                             <span class="badge bg-secondary bg-opacity-10 text-secondary">
@@ -118,8 +151,8 @@
                                 Nye
                             </span>
                         </div>
-                    </div>
-                    {{-- <div class="mb-3">
+                    </div> --}}
+                    <div class="mb-3">
                         <h6 class="text-muted mb-2">関連科目</h6>
                         <div class="d-flex flex-wrap gap-2">
                             @forelse($course->subjects as $subject)
@@ -137,13 +170,13 @@
                         <div class="d-flex flex-wrap gap-2">
                             @forelse($course->teachers as $teacher)
                                 <span class="badge bg-secondary bg-opacity-10 text-secondary">
-                                    {{ $teacher->name }}
+                                    {{ $teacher->first_name }} {{ $teacher->last_name }}
                                 </span>
                             @empty
                                 <span class="text-muted">なし</span>
                             @endforelse
                         </div>
-                    </div> --}}
+                    </div>
 
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">

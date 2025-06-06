@@ -11,4 +11,12 @@ class CourseSubject extends Model
         'subject_id',
         'is_deleted',
     ];
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
 }
